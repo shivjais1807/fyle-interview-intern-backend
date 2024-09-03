@@ -11,3 +11,5 @@ class Principal(db.Model):
 
     def __repr__(self):
         return '<Principal %r>' % self.id
+    
+  
