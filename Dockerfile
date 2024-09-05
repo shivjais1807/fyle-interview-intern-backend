@@ -16,7 +16,7 @@ RUN  pip install --no-cache-dir -r requirements.txt
 ENV FLASK_APP=core/server.py
 RUN rm -f core/store.sqlite3
 RUN flask db upgrade -d core/migrations/
-# RUN pytest --cov
+RUN pytest --cov
 
 # Expose the port 
 EXPOSE 7760

@@ -60,4 +60,31 @@ def test_regrade_assignment(client, h_principal):
 
     assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
     assert response.json['data']['grade'] == GradeEnum.B
+# New test added to increase the code coverage
 
+def test_get_all_teachers(client, h_principal):
+    response = client.get(
+        '/principal/teachers',
+        headers=h_principal
+    )
+    
+    assert response.status_code == 200
+    
+    data = response.json['data']
+    
+    # checking the user ID of recieved data of teachers.
+    # In default DB, there are only two teachers with ID's 3 and 4
+    
+    # Please comment the below part of test code, if the database is changed later.
+    for teacher in data:
+        assert teacher['user_id'] in [3, 4]
+          
+
+# Test to check the request for invalid route
+def test_invalid_route(client):
+    """
+    failure case: When an invalid route is requested
+    """
+    response = client.get('/teacher-assignment')
+    assert response.status_code == 404
+    assert response.json['error'] == 'NotFound'

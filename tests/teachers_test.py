@@ -1,3 +1,5 @@
+from core.models.assignments import GradeEnum
+
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',
@@ -99,3 +101,21 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+
+
+#  Added a test to check that teacher shouldn't be able to regrade an assignment
+def test_re_grade_assignment_by_teacher(client, h_teacher_1):
+    """
+    failure case: A teacher can't re-grade an assignment, only a principal can re-grade the assignment.
+    """
+    response = client.post(
+        '/teacher/assignments/grade',
+        json={
+            'id': 4,
+            'grade': GradeEnum.C.value
+        },
+        headers=h_teacher_1
+    )
+
+    assert response.status_code == 400
